@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import LogoIcon from "@/components/icons/LogoIcon";
+import Code from "@/components/icons/chat/Code";
 
 export default function Chat() {
   return (
@@ -11,10 +12,17 @@ export default function Chat() {
       </p>
 
       <div className="flex flex-col w-full">
-        <Button>코드 작성 도움</Button>
-        <Button>코드 작성 도움</Button>
-        <Button>코드 작성 도움</Button>
-        <Button>코드 작성 도움</Button>
+        <Button className="flex items-center gap-3 bg-white border rounded-2xl px-4 py-3 h-auto w-full shadow-sm">
+          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl shrink-0">
+            <Code />
+          </div>
+          <div className="flex flex-col items-start text-black">
+            <p className="text-[16px] font-medium">코드 작성 도움</p>
+            <p className="text-[13px] text-gray-400">
+              React 컴포넌트를 만드는 방법을 알려주세요.
+            </p>
+          </div>
+        </Button>
       </div>
     </main>
   );

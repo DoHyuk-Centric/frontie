@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTheme } from "next-themes";
 import { Menu, Plus, Settings, Moon, MessageSquare, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SettingsModal from "@/components/settings/SettingsModal";
 
 const chatList = [
   { id: 1, title: "새 대화" },
@@ -14,6 +15,7 @@ const chatList = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+  const [settingsOpen, setSettingOpen] = useState(false);
 
   return (
     <>
@@ -30,7 +32,11 @@ export default function Header() {
           <Button variant="ghost" size="icon">
             <Plus size={20} />
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSettingOpen(true)}
+          >
             <Settings size={20} />
           </Button>
         </div>
@@ -79,16 +85,25 @@ export default function Header() {
             }
           >
             <Moon size={16} className="text-muted-foreground dark:hidden" />
-            <Sun size={16} className="text-muted-foreground hidden dark:block" />
+            <Sun
+              size={16}
+              className="text-muted-foreground hidden dark:block"
+            />
             다크 모드
           </Button>
           <Button
             variant="ghost"
             className="justify-start gap-2 text-sm font-normal"
+            onClick={() => setSettingOpen(true)}
           >
             <Settings size={16} className="text-muted-foreground" />
             설정
           </Button>
+
+          <SettingsModal
+            open={settingsOpen}
+            onClose={() => setSettingOpen(false)}
+          />
         </div>
       </div>
     </>

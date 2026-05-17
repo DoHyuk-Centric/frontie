@@ -1,4 +1,4 @@
-import Header from "@/components/header/page";
+import Header from "@/components/header/Header";
 import Chat from "@/app/Chat/page";
 
 export default function Home() {

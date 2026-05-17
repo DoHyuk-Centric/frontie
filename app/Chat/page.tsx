@@ -1,5 +1,8 @@
-import LogoIcon from "@/components/icons/LogoIcon";
 import ExampleQuestion from "@/components/chat/ExampleQuestion";
+import TextInput from "@/components/chat/TextInput"
+
+import LogoIcon from "@/components/icons/LogoIcon";
+
 import Code from "@/components/icons/chat/Code";
 import Docs from "@/components/icons/chat/Docs";
 import ElectricBulb from "@/components/icons/chat/ElectircBulb";
@@ -30,23 +33,28 @@ const questions = [
 
 export default function Chat() {
   return (
-    <main className="flex flex-col items-center p-4">
-      <LogoIcon />
-      <h2 className="text-[24px]">프론트에게 물어보세요.</h2>
-      <p className="text-[14px] text-[#717182] text-center">
-        무엇을 도와드릴까요? 아래 제안 중 하나를 선택하거나 직접 질문해보세요.
-      </p>
-
-      <div className="flex flex-col w-full">
-        {questions.map((q, index) => (
-          <ExampleQuestion
-            key={index}
-            title={q.title}
-            subTitle={q.subTitle}
-            icon={q.icon}
-          />
-        ))}
+    <main className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col items-center justify-center p-4 flex-1 gap-4">
+        <LogoIcon />
+        <div className="text-center">
+          <h2 className="text-[24px]">프론티에게 물어보세요.</h2>
+          <p className="text-[14px] text-[#717182]">
+            무엇을 도와드릴까요? 아래 제안 중 하나를 선택하거나 직접 질문해보세요.
+          </p>
+        </div>
+  
+        <div className="flex flex-col w-full gap-2">
+          {questions.map((q, index) => (
+            <ExampleQuestion
+              key={index}
+              title={q.title}
+              subTitle={q.subTitle}
+              icon={q.icon}
+            />
+          ))}
+        </div>
       </div>
+      <TextInput />
     </main>
   );
 }

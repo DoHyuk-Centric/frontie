@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import LogoIcon from "@/components/icons/LogoIcon";
 import ExampleQuestion from "@/components/chat/ExampleQuestion";
 import Code from "@/components/icons/chat/Code";
@@ -31,7 +30,7 @@ const questions = [
 
 export default function Chat() {
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center p-4">
       <LogoIcon />
       <h2 className="text-[24px]">프론트에게 물어보세요.</h2>
       <p className="text-[14px] text-[#717182] text-center">

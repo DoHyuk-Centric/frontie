@@ -1,6 +1,33 @@
 import { Button } from "@/components/ui/button";
 import LogoIcon from "@/components/icons/LogoIcon";
+import ExampleQuestion from "@/components/chat/ExampleQuestion";
 import Code from "@/components/icons/chat/Code";
+import Docs from "@/components/icons/chat/Docs";
+import ElectricBulb from "@/components/icons/chat/ElectircBulb";
+import Idea from "@/components/icons/chat/Idea";
+
+const questions = [
+  {
+    title: "코드 작성 도움",
+    subTitle: "React 컴포넌트를 만드는 방법을 알려주세요.",
+    icon: <Code />,
+  },
+  {
+    title: "문서 요약",
+    subTitle: "이 문서의 주요 내용을 요약해주세요.",
+    icon: <Docs />,
+  },
+  {
+    title: "아이디어 브레인스토밍",
+    subTitle: "새로운 프로젝트 아이디어를 제안해주세요.",
+    icon: <ElectricBulb />,
+  },
+  {
+    title: "창의적인 글쓰기",
+    subTitle: "창의적인 이야기를 작성해주세요.",
+    icon: <Idea />,
+  },
+];
 
 export default function Chat() {
   return (
@@ -12,17 +39,14 @@ export default function Chat() {
       </p>
 
       <div className="flex flex-col w-full">
-        <Button className="flex items-center gap-3 bg-white border rounded-2xl px-4 py-3 h-auto w-full shadow-sm">
-          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl shrink-0">
-            <Code />
-          </div>
-          <div className="flex flex-col items-start text-black">
-            <p className="text-[16px] font-medium">코드 작성 도움</p>
-            <p className="text-[13px] text-gray-400">
-              React 컴포넌트를 만드는 방법을 알려주세요.
-            </p>
-          </div>
-        </Button>
+        {questions.map((q, index) => (
+          <ExampleQuestion
+            key={index}
+            title={q.title}
+            subTitle={q.subTitle}
+            icon={q.icon}
+          />
+        ))}
       </div>
     </main>
   );

@@ -1,24 +1,24 @@
+import { Menu, Plus, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import MenuIcon from "@/components/icons/MenuIcon";
-import NewChat from "@/components/icons/NewChat";
-import Setting from "@/components/icons/Setting";
 
 export default function Header() {
   return (
-    <header>
-      <div className="flex">
-        <Button variant="ghost" size="icon">
-          <MenuIcon />
+    <header className="relative flex items-center w-full h-14 px-2 bg-background border-b border-border">
+      <div className="w-20 flex items-center">
+        <Button variant="ghost" size="icon" className="shrink-0">
+          <Menu size={20} />
         </Button>
-        <h1>새대화</h1>
-        <div>
-          <Button variant="ghost" size="icon">
-            <NewChat />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Setting />
-          </Button>
-        </div>
+      </div>
+
+      <h1 className="flex-1 text-center text-base font-semibold">새 대화</h1>
+
+      <div className="w-20 flex items-center justify-end">
+        <Button variant="ghost" size="icon">
+          <Plus size={20} />
+        </Button>
+        <Button variant="ghost" size="icon">
+          <Settings size={20} />
+        </Button>
       </div>
     </header>
   );

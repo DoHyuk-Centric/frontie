@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Plus, Settings, Moon, MessageSquare } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Menu, Plus, Settings, Moon, MessageSquare, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const chatList = [
@@ -12,6 +13,7 @@ const chatList = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <>
@@ -59,18 +61,31 @@ export default function Header() {
               variant="ghost"
               className="justify-start gap-2 text-sm font-normal"
             >
-              <MessageSquare size={16} className="text-muted-foreground shrink-0" />
+              <MessageSquare
+                size={16}
+                className="text-muted-foreground shrink-0"
+              />
               {chat.title}
             </Button>
           ))}
         </nav>
 
         <div className="px-3 pb-6 flex flex-col gap-1 border-t pt-3">
-          <Button variant="ghost" className="justify-start gap-2 text-sm font-normal">
-            <Moon size={16} className="text-muted-foreground" />
+          <Button
+            variant="ghost"
+            className="justify-start gap-2 text-sm font-normal"
+            onClick={() =>
+              setTheme(resolvedTheme === "dark" ? "light" : "dark")
+            }
+          >
+            <Moon size={16} className="text-muted-foreground dark:hidden" />
+            <Sun size={16} className="text-muted-foreground hidden dark:block" />
             다크 모드
           </Button>
-          <Button variant="ghost" className="justify-start gap-2 text-sm font-normal">
+          <Button
+            variant="ghost"
+            className="justify-start gap-2 text-sm font-normal"
+          >
             <Settings size={16} className="text-muted-foreground" />
             설정
           </Button>

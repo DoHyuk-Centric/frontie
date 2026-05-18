@@ -4,11 +4,20 @@ interface Props {
   title: string;
   subTitle: string;
   icon: React.ReactNode;
+  onClick?: () => void;
 }
 
-export default function ExampleQuestion({ title, subTitle, icon }: Props) {
+export default function ExampleQuestion({
+  title,
+  subTitle,
+  icon,
+  onClick,
+}: Props) {
   return (
-    <Button className="flex justify-start gap-3 bg-white border rounded-2xl px-4 py-3 h-auto w-full shadow-sm">
+    <Button
+      onClick={onClick}
+      className="flex justify-start gap-3 bg-white border rounded-2xl px-4 py-3 h-auto w-full shadow-sm"
+    >
       <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-xl shrink-0">
         {icon}
       </div>

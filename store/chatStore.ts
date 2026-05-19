@@ -11,6 +11,7 @@ interface ChatStore {
   activeId: number | null;
   addChat: () => void;
   setActiveId: (id: number) => void;
+  deleteChat: (id: number) => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -31,6 +32,11 @@ export const useChatStore = create<ChatStore>()(
       },
 
       setActiveId: (id) => set({ activeId: id }),
+      deleteChat: (id) =>
+        set((state) => ({
+          chatList: state.chatList.filter((chat) => chat.id !== id),
+          activeId: state.activeId === id ? null : state.activeId,
+        })),
     }),
     { name: "chat-storage" },
   ),

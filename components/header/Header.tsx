@@ -5,12 +5,7 @@ import { useTheme } from "next-themes";
 import { Menu, Plus, Settings, Moon, MessageSquare, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SettingsModal, { AISettings } from "@/components/settings/SettingsModal";
-
-const chatList = [
-  { id: 1, title: "새 대화" },
-  { id: 2, title: "새 대화" },
-  { id: 3, title: "프론티 소개" },
-];
+import { useChatStore } from "@/store/chatStore";
 
 export default function Header({
   onSaveSettings,
@@ -20,6 +15,7 @@ export default function Header({
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [settingsOpen, setSettingOpen] = useState(false);
+  const { chatList, activeId, addChat, setActiveId } = useChatStore();
 
   return (
     <>
@@ -33,7 +29,7 @@ export default function Header({
         <h1 className="flex-1 text-center text-base font-semibold">새 대화</h1>
 
         <div className="w-20 flex items-center justify-end">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" onClick={addChat}>
             <Plus size={20} />
           </Button>
           <Button
@@ -65,19 +61,26 @@ export default function Header({
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 flex flex-col gap-1">
-          {chatList.map((chat) => (
-            <Button
-              key={chat.id}
-              variant="ghost"
-              className="justify-start gap-2 text-sm font-normal"
-            >
-              <MessageSquare
-                size={16}
-                className="text-muted-foreground shrink-0"
-              />
-              {chat.title}
-            </Button>
-          ))}
+          {chatList.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center mt-4">
+              대화가 없습니다
+            </p>
+          ) : (
+            chatList.map((chat) => (
+              <Button
+                key={chat.id}
+                variant={activeId === chat.id ? "secondary" : "ghost"}
+                className="justify-start gap-2 text-sm font-normal"
+                onClick={() => setActiveId(chat.id)}
+              >
+                <MessageSquare
+                  size={16}
+                  className="text-muted-foreground shrink-0"
+                />
+                {chat.title}
+              </Button>
+            ))
+          )}
         </nav>
 
         <div className="px-3 pb-6 flex flex-col gap-1 border-t pt-3">

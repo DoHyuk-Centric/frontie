@@ -1,4 +1,10 @@
-import { convertToModelMessages, streamText, UIMessage } from "ai";
+import {
+  convertToModelMessages,
+  streamText,
+  UIMessage,
+  ModelMessage,
+  TextPart,
+} from "ai";
 import { MODELS } from "@/lib/ai-providers";
 
 export async function POST(req: Request) {
@@ -29,10 +35,24 @@ export async function POST(req: Request) {
          반드시 한국어로만 답변하세요. 기술 용어는 영어 원문을 그대로 사용해도 됩니다.
          질문에 바로 답변하세요. 불필요한 서두는 생략하세요.`;
 
+  const convertedMessages = await convertToModelMessages(messages);
+  const sanitizedMessages: ModelMessage[] =
+    model === "cerebras"
+      ? (convertedMessages.map((msg) => ({
+          role: msg.role,
+          content:
+            typeof msg.content === "string"
+              ? msg.content
+              : (msg.content as TextPart[]).filter(
+                  (part) => part.type === "text",
+                ),
+        })) as ModelMessage[])
+      : convertedMessages;
+
   const result = streamText({
     model: selectedModel,
     system: systemPrompt,
-    messages: await convertToModelMessages(messages),
+    messages: sanitizedMessages,
     temperature: creativity / 100,
     maxOutputTokens: Number(maxLength),
   });

@@ -60,7 +60,7 @@ export default function Chat({ settings }: { settings: AISettings }) {
   const hasMessages = messages.length > 0;
   return (
     <main className="flex flex-col flex-1 min-h-0">
-      <div className="flex flex-col items-center justify-center p-4 flex-1 gap-4">
+      <div className="flex flex-col items-center justify-center p-4 flex-1 gap-4 min-h-0 overflow-hidden">
         {!hasMessages && (
           <>
             <LogoIcon />
@@ -86,7 +86,7 @@ export default function Chat({ settings }: { settings: AISettings }) {
         )}
 
         {hasMessages && (
-          <div className="flex flex-col w-full gap-4">
+          <div className="flex flex-col w-full gap-4 overflow-y-auto flex-1">
             {messages.map((message) => (
               <div
                 key={message.id}

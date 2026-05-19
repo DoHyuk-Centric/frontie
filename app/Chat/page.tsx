@@ -14,6 +14,7 @@ import Docs from "@/components/icons/chat/Docs";
 import ElectricBulb from "@/components/icons/chat/ElectircBulb";
 import Idea from "@/components/icons/chat/Idea";
 import ReactMarkdown from "react-markdown";
+import { AISettings } from "@/components/settings/SettingsModal";
 
 const questions = [
   {
@@ -41,10 +42,18 @@ const questions = [
 const cleanText = (text: string) =>
   text.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 
-export default function Chat() {
+export default function Chat({ settings }: { settings: AISettings }) {
   const [input, setInput] = useState("");
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      body: {
+        model: settings.model,
+        creativity: settings.creativity,
+        maxLength: settings.maxLength,
+        language: settings.language,
+      },
+    }),
   });
 
   const isLoading = status === "streaming" || status === "submitted";
@@ -92,32 +101,33 @@ export default function Chat() {
                 >
                   {message.parts.map((part, i) =>
                     part.type === "text" ? (
-                      <ReactMarkdown
-                        key={i}
-                        components={{
-                          code({ children, className }) {
-                            const isBlock = !!className;
-                            return isBlock ? (
-                              <code className="block bg-gray-800 text-green-300 rounded-lg p-3 text-sm font-mono overflow-x-auto my-2">
-                                {children}
-                              </code>
-                            ) : (
-                              <code className="bg-gray-200 dark:bg-gray-600 rounded px-1 py-0.5 text-sm font-mono">
-                                {children}
-                              </code>
-                            );
-                          },
-                          pre({ children }) {
-                            return (
-                              <pre className="bg-gray-800 rounded-lg p-3 overflow-x-auto my-2">
-                                {children}
-                              </pre>
-                            );
-                          },
-                        }}
-                      >
-                        {cleanText(part.text)}
-                      </ReactMarkdown>
+                      <div key={i} className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={{
+                            code({ children, className }) {
+                              const isBlock = !!className;
+                              return isBlock ? (
+                                <code className="block bg-gray-800 text-green-300 rounded-lg p-3 text-sm font-mono overflow-x-auto my-2">
+                                  {children}
+                                </code>
+                              ) : (
+                                <code className="bg-gray-200 dark:bg-gray-600 rounded px-1 py-0.5 text-sm font-mono">
+                                  {children}
+                                </code>
+                              );
+                            },
+                            pre({ children }) {
+                              return (
+                                <pre className="bg-gray-800 rounded-lg p-3 overflow-x-auto my-2">
+                                  {children}
+                                </pre>
+                              );
+                            },
+                          }}
+                        >
+                          {cleanText(part.text)}
+                        </ReactMarkdown>
+                      </div>
                     ) : null,
                   )}
                 </div>

@@ -14,6 +14,7 @@ import Docs from "@/components/icons/chat/Docs";
 import ElectricBulb from "@/components/icons/chat/ElectircBulb";
 import Idea from "@/components/icons/chat/Idea";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { AISettings } from "@/components/settings/SettingsModal";
 
 const questions = [
@@ -103,6 +104,7 @@ export default function Chat({ settings }: { settings: AISettings }) {
                     part.type === "text" ? (
                       <div key={i} className="prose prose-sm max-w-none">
                         <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
                           components={{
                             code({ children, className }) {
                               const isBlock = !!className;
@@ -121,6 +123,43 @@ export default function Chat({ settings }: { settings: AISettings }) {
                                 <pre className="bg-gray-800 rounded-lg p-3 overflow-x-auto my-2">
                                   {children}
                                 </pre>
+                              );
+                            },
+                            table({ children }) {
+                              return (
+                                <div className="overflow-x-auto my-2">
+                                  <table className="w-full text-sm border-collapse">
+                                    {children}
+                                  </table>
+                                </div>
+                              );
+                            },
+                            thead({ children }) {
+                              return (
+                                <thead className="bg-gray-200 dark:bg-gray-700">
+                                  {children}
+                                </thead>
+                              );
+                            },
+                            th({ children }) {
+                              return (
+                                <th className="border border-gray-300 dark:border-gray-600 px-3 py-2 text-left font-semibold">
+                                  {children}
+                                </th>
+                              );
+                            },
+                            td({ children }) {
+                              return (
+                                <td className="border border-gray-300 dark:border-gray-600 px-3 py-2">
+                                  {children}
+                                </td>
+                              );
+                            },
+                            tr({ children }) {
+                              return (
+                                <tr className="even:bg-gray-50 dark:even:bg-gray-700/50">
+                                  {children}
+                                </tr>
                               );
                             },
                           }}

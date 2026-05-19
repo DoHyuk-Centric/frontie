@@ -96,6 +96,7 @@ export default function SettingsModal({
               <SelectContent>
                 <SelectItem value="groq">Groq</SelectItem>
                 <SelectItem value="gemini">Gemini</SelectItem>
+                <SelectItem value="cerebras">Cerebras</SelectItem>
               </SelectContent>
             </Select>
           </div>

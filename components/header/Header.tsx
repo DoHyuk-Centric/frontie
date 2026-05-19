@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTheme } from "next-themes";
 import { Menu, Plus, Settings, Moon, MessageSquare, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import SettingsModal from "@/components/settings/SettingsModal";
+import SettingsModal, { AISettings } from "@/components/settings/SettingsModal";
 
 const chatList = [
   { id: 1, title: "새 대화" },
@@ -12,7 +12,11 @@ const chatList = [
   { id: 3, title: "프론티 소개" },
 ];
 
-export default function Header() {
+export default function Header({
+  onSaveSettings,
+}: {
+  onSaveSettings: (s: AISettings) => void;
+}) {
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [settingsOpen, setSettingOpen] = useState(false);
@@ -103,6 +107,7 @@ export default function Header() {
           <SettingsModal
             open={settingsOpen}
             onClose={() => setSettingOpen(false)}
+            onSave={onSaveSettings}
           />
         </div>
       </div>

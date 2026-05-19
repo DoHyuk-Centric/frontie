@@ -38,7 +38,7 @@ export default function ChatInput({
         className="flex-1 rounded-full bg-muted border-none focus-visible:ring-0 text-sm"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => e.key === "Endter" && handleSubmit()}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         disabled={isLoading}
       />
 

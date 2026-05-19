@@ -17,17 +17,63 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import type { ModelKey } from "@/lib/ai-providers";
+
+export interface AISettings {
+  model: ModelKey;
+  creativity: number;
+  maxLength: string;
+  language: string;
+}
+
+const DEFAULT_SETTINGS: AISettings = {
+  model: "gemini",
+  creativity: 70,
+  maxLength: "512",
+  language: "ko",
+};
+
+const STORAGE_KEY = "ai-settings";
+
+export function loadSettings(): AISettings {
+  if (typeof window === "undefined") return DEFAULT_SETTINGS;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_SETTINGS;
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
 
 interface SettingsModalProps {
   open: boolean;
   onClose: () => void;
+  onSave?: (settings: AISettings) => void;
 }
 
-export default function SettingsModal({ open, onClose }: SettingsModalProps) {
-  const [model, setModel] = useState("gpt-4");
-  const [creativity, setCreativity] = useState([70]);
-  const [maxLength, setMaxLength] = useState("512");
-  const [language, setLanguage] = useState("ko");
+export default function SettingsModal({
+  open,
+  onClose,
+  onSave,
+}: SettingsModalProps) {
+  const [model, setModel] = useState<ModelKey>(() => loadSettings().model);
+  const [creativity, setCreativity] = useState(() => [
+    loadSettings().creativity,
+  ]);
+  const [maxLength, setMaxLength] = useState(() => loadSettings().maxLength);
+  const [language, setLanguage] = useState(() => loadSettings().language);
+
+  const handleSave = () => {
+    const settings: AISettings = {
+      model,
+      creativity: creativity[0],
+      maxLength,
+      language,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    onSave?.(settings);
+    onClose();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -40,13 +86,16 @@ export default function SettingsModal({ open, onClose }: SettingsModalProps) {
         <div className="flex flex-col gap-5 py-2">
           <div className="flex flex-col gap-2">
             <label className="text-sm text-muted-foreground">모델</label>
-            <Select value={model} onValueChange={setModel}>
+            <Select
+              value={model}
+              onValueChange={(v) => setModel(v as ModelKey)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gpt-4">GPT-4</SelectItem>
-                <SelectItem value="gpt-3.5">GPT-3.5</SelectItem>
+                <SelectItem value="groq">Groq</SelectItem>
+                <SelectItem value="gemini">Gemini</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -59,7 +108,7 @@ export default function SettingsModal({ open, onClose }: SettingsModalProps) {
               min={0}
               max={100}
               step={1}
-              className="[&_[role=slider]]:bg-purple-500 [&_.range]:bg-purple-500"
+              className="**:[[role=slider]]:bg-purple-500 [&_.range]:bg-purple-500"
             />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>정확함</span>
@@ -107,7 +156,7 @@ export default function SettingsModal({ open, onClose }: SettingsModalProps) {
           </Button>
           <Button
             className="flex-1 rounded-xl bg-foreground text-background"
-            onClick={onClose}
+            onClick={handleSave}
           >
             저장
           </Button>

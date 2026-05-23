@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ExampleQuestion from "@/components/chat/ExampleQuestion";
 import ChatInput from "@/components/chat/ChatInput";
@@ -16,6 +16,7 @@ import Idea from "@/components/icons/chat/Idea";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { AISettings } from "@/components/settings/SettingsModal";
+import { useChatStore } from "@/store/chatStore";
 
 const questions = [
   {
@@ -45,7 +46,10 @@ const cleanText = (text: string) =>
 
 export default function Chat({ settings }: { settings: AISettings }) {
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status } = useChat({
+  const { chatList, activeId, updateMessages } = useChatStore();
+  const activeChat = chatList.find((c) => c.id === activeId);
+
+  const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
       body: {
@@ -56,6 +60,24 @@ export default function Chat({ settings }: { settings: AISettings }) {
       },
     }),
   });
+
+  useEffect(() => {
+    setMessages(activeChat?.messages ?? []);
+  }, [activeId]);
+
+  useEffect(() => {
+    if (activeId && messages.length > 0 && status === "ready") {
+      updateMessages(activeId, messages);
+    }
+  }, [status, activeId, messages, updateMessages]);
+
+  useEffect(() => {
+    if (activeId && messages.length === 1 && messages[0].role === "user") {
+      const firstText =
+        messages[0].parts.find((p) => p.type === "text")?.text ?? "새 대화";
+      useChatStore.getState().updateTitle(activeId, firstText.slice(0, 20));
+    }
+  }, [messages, activeId]);
 
   const isLoading = status === "streaming" || status === "submitted";
   const hasMessages = messages.length > 0;

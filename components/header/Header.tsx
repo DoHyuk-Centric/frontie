@@ -35,7 +35,7 @@ export default function Header({
           </Button>
         </div>
 
-        <h1 className="flex-1 text-center text-base font-semibold">새 대화</h1>
+        <h1 className="flex-1 text-center text-base font-semibold">프론티</h1>
 
         <div className="w-20 flex items-center justify-end">
           <Button variant="ghost" size="icon" onClick={addChat}>

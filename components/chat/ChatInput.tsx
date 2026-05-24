@@ -63,7 +63,7 @@ export default function ChatInput({
 
     if (isCode) {
       e.preventDefault();
-      const lang = detectLanguage(text); // ✅
+      const lang = detectLanguage(text);
       setInput(input + `\`\`\`${lang}\n${text}\n\`\`\``);
     }
   };

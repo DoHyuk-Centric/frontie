@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import SettingsModal, { AISettings } from "@/components/settings/SettingsModal";
 import { useChatStore } from "@/store/chatStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Header({
   onSaveSettings,
@@ -25,8 +26,7 @@ export default function Header({
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [settingsOpen, setSettingOpen] = useState(false);
-  const { chatList, activeId, deleteChat } =
-    useChatStore();
+  const { chatList, activeId, deleteChat } = useChatStore();
 
   const handleAddChat = () => {
     router.push(`/chat`);
@@ -45,7 +45,9 @@ export default function Header({
           </Button>
         </div>
 
-        <h1 className="flex-1 text-center text-base font-semibold">프론티</h1>
+        <h1 className="flex-1 text-center text-base font-semibold">
+          <Link href="/chat">프론티</Link>
+        </h1>
 
         <div className="w-20 flex items-center justify-end">
           <Button variant="ghost" size="icon" onClick={handleAddChat}>

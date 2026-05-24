@@ -136,7 +136,7 @@ export default function Chat() {
                 >
                   {message.parts.map((part, i) =>
                     part.type === "text" ? (
-                      <div key={i} className="prose prose-sm max-w-none">
+                      <div key={i} className="prose prose-sm max-w-none prose-code:bg-transparent">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           rehypePlugins={[rehypeRaw]}

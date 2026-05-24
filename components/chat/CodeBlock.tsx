@@ -19,16 +19,18 @@ export default function CodeBlock({ children, className }: Props) {
   }
 
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={oneDark}
-      customStyle={{
-        borderRadius: "0.5rem",
-        fontSize: "0.875rem",
-        margin: "0.5rem 0",
-      }}
-    >
-      {String(children).replace(/\n$/, "")}
-    </SyntaxHighlighter>
+    <div className="not-prose">
+        <SyntaxHighlighter
+          language={language}
+          style={oneDark}
+          customStyle={{
+            borderRadius: "0.5rem",
+            fontSize: "0.875rem",
+            margin: "0.5rem 0",
+          }}
+        >
+          {String(children).replace(/\n$/, "")}
+        </SyntaxHighlighter>
+    </div>
   );
 }

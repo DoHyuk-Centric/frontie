@@ -58,7 +58,6 @@ export default function Chat() {
       body: {
         model: settings.model,
         creativity: settings.creativity,
-        maxLength: settings.maxLength,
         language: settings.language,
       },
     }),

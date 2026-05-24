@@ -22,14 +22,12 @@ import type { ModelKey } from "@/lib/ai-providers";
 export interface AISettings {
   model: ModelKey;
   creativity: number;
-  maxLength: string;
   language: string;
 }
 
 const DEFAULT_SETTINGS: AISettings = {
   model: "gemini",
   creativity: 70,
-  maxLength: "512",
   language: "ko",
 };
 
@@ -54,7 +52,6 @@ interface SettingsModalProps {
 export const defaultSettings: AISettings = {
   model: "cerebras",
   creativity: 0.7,
-  maxLength: "1000",
   language: "ko",
 };
 
@@ -67,14 +64,12 @@ export default function SettingsModal({
   const [creativity, setCreativity] = useState(() => [
     loadSettings().creativity,
   ]);
-  const [maxLength, setMaxLength] = useState(() => loadSettings().maxLength);
   const [language, setLanguage] = useState(() => loadSettings().language);
 
   const handleSave = () => {
     const settings: AISettings = {
       model,
       creativity: creativity[0],
-      maxLength,
       language,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -122,22 +117,6 @@ export default function SettingsModal({
               <span>정확함</span>
               <span>창의적</span>
             </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-muted-foreground">
-              최대 응답 길이
-            </label>
-            <Select value={maxLength} onValueChange={setMaxLength}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="512">짧음 (512 토큰)</SelectItem>
-                <SelectItem value="1024">중간 (1024 토큰)</SelectItem>
-                <SelectItem value="2048">김 (2048 토큰)</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <div className="flex flex-col gap-2">

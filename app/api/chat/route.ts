@@ -12,7 +12,6 @@ export async function POST(req: Request) {
     messages,
     model = `gemini`,
     creativity = 70,
-    maxLength = "512",
     language = "ko",
   }: {
     messages: UIMessage[];
@@ -54,7 +53,6 @@ export async function POST(req: Request) {
     system: systemPrompt,
     messages: sanitizedMessages,
     temperature: creativity / 100,
-    maxOutputTokens: Number(maxLength),
   });
 
   return result.toUIMessageStreamResponse();

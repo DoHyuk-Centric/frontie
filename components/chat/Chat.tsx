@@ -112,7 +112,7 @@ export default function Chat() {
                   title={q.title}
                   subTitle={q.subTitle}
                   icon={q.icon}
-                  onClick={() => sendMessage({ text: q.subTitle })}
+                  onClick={() => handleSendMessage({ text: q.subTitle })}
                 />
               ))}
             </div>

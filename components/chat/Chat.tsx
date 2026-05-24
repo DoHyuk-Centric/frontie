@@ -18,6 +18,8 @@ import remarkGfm from "remark-gfm";
 import { useChatStore } from "@/store/chatStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useRouter } from "next/navigation";
+import rehypeRaw from "rehype-raw"
+import CodeBlock from "./CodeBlock";
 
 const questions = [
   {
@@ -104,7 +106,7 @@ export default function Chat() {
                 질문해보세요.
               </p>
             </div>
-            <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col items-center w-full gap-2">
               {questions.map((q, index) => (
                 <ExampleQuestion
                   key={index}
@@ -128,70 +130,31 @@ export default function Chat() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     message.role === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100 dark:bg-gray-800"
+                      ? "bg-blue-500 text-white dark:bg-slate-700"
+                      : "bg-gray-100 dark:bg-gray-900"
                   }`}
                 >
                   {message.parts.map((part, i) =>
                     part.type === "text" ? (
-                      <div key={i} className="prose prose-sm max-w-none">
+                      <div key={i} className="prose prose-invert prose-sm max-w-none prose-code:bg-transparent">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
                           components={{
                             code({ children, className }) {
-                              const isBlock = !!className;
-                              return isBlock ? (
-                                <code className="block bg-gray-800 text-green-300 rounded-lg p-3 text-sm font-mono overflow-x-auto my-2">
-                                  {children}
-                                </code>
-                              ) : (
-                                <code className="bg-gray-200 dark:bg-gray-600 rounded px-1 py-0.5 text-sm font-mono">
-                                  {children}
-                                </code>
+                              return (
+                                <CodeBlock className={className}>
+                                  {String(children)}
+                                </CodeBlock>
                               );
                             },
-                            pre({ children }) {
+                            img({ src, alt }) {
                               return (
-                                <pre className="bg-gray-800 rounded-lg p-3 overflow-x-auto my-2">
-                                  {children}
-                                </pre>
-                              );
-                            },
-                            table({ children }) {
-                              return (
-                                <div className="overflow-x-auto my-2">
-                                  <table className="w-full text-sm border-collapse">
-                                    {children}
-                                  </table>
-                                </div>
-                              );
-                            },
-                            thead({ children }) {
-                              return (
-                                <thead className="bg-gray-200 dark:bg-gray-700">
-                                  {children}
-                                </thead>
-                              );
-                            },
-                            th({ children }) {
-                              return (
-                                <th className="border border-gray-300 dark:border-gray-600 px-3 py-2 text-left font-semibold">
-                                  {children}
-                                </th>
-                              );
-                            },
-                            td({ children }) {
-                              return (
-                                <td className="border border-gray-300 dark:border-gray-600 px-3 py-2">
-                                  {children}
-                                </td>
-                              );
-                            },
-                            tr({ children }) {
-                              return (
-                                <tr className="even:bg-gray-50 dark:even:bg-gray-700/50">
-                                  {children}
-                                </tr>
+                                <img
+                                  src={src}
+                                  alt={alt}
+                                  className="rounded-lg max-w-full my-2"
+                                />
                               );
                             },
                           }}

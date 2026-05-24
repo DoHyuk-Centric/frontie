@@ -11,11 +11,12 @@ interface Chat {
 interface ChatStore {
   chatList: Chat[];
   activeId: number | null;
-  addChat: () => void;
+  addChat: () => number;
   setActiveId: (id: number) => void;
   deleteChat: (id: number) => void;
   updateMessages: (id: number, messages: UIMessage[]) => void;
   updateTitle: (id: number, title: string) => void;
+  clearActiveId: () => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -34,6 +35,7 @@ export const useChatStore = create<ChatStore>()(
           chatList: [newChat, ...state.chatList],
           activeId: newChat.id,
         }));
+        return newChat.id;
       },
 
       setActiveId: (id) => set({ activeId: id }),
@@ -54,7 +56,11 @@ export const useChatStore = create<ChatStore>()(
             chat.id === id ? { ...chat, title } : chat,
           ),
         })),
+      clearActiveId: () => set({ activeId: null }),
     }),
-    { name: "chat-storage" },
+    {
+      name: "chat-storage",
+      partialize: (state) => ({ chatList: state.chatList }),
+    },
   ),
 );

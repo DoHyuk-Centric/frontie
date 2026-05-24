@@ -51,6 +51,13 @@ interface SettingsModalProps {
   onSave?: (settings: AISettings) => void;
 }
 
+export const defaultSettings: AISettings = {
+  model: "cerebras",
+  creativity: 0.7,
+  maxLength: "1000",
+  language: "ko",
+};
+
 export default function SettingsModal({
   open,
   onClose,

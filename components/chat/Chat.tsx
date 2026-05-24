@@ -130,13 +130,13 @@ export default function Chat() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     message.role === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100 dark:bg-gray-800"
+                      ? "bg-blue-500 text-white dark:bg-slate-700"
+                      : "bg-gray-100 dark:bg-gray-900"
                   }`}
                 >
                   {message.parts.map((part, i) =>
                     part.type === "text" ? (
-                      <div key={i} className="prose prose-sm max-w-none prose-code:bg-transparent">
+                      <div key={i} className="prose prose-invert prose-sm max-w-none prose-code:bg-transparent">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           rehypePlugins={[rehypeRaw]}

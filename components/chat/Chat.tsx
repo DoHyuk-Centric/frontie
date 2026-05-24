@@ -78,7 +78,7 @@ export default function Chat() {
     if (activeId && messages.length === 1 && messages[0].role === "user") {
       const firstText =
         messages[0].parts.find((p) => p.type === "text")?.text ?? "새 대화";
-      useChatStore.getState().updateTitle(activeId, firstText.slice(0, 20));
+      useChatStore.getState().updateTitle(activeId, firstText.slice(0, 15));
     }
   }, [messages, activeId]);
 

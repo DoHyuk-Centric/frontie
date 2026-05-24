@@ -55,6 +55,9 @@ export const useChatStore = create<ChatStore>()(
           ),
         })),
     }),
-    { name: "chat-storage" },
+    {
+      name: "chat-storage",
+      partialize: (state) => ({ chatList: state.chatList }),
+    },
   ),
 );

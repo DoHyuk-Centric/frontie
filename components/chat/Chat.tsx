@@ -18,6 +18,7 @@ import remarkGfm from "remark-gfm";
 import { useChatStore } from "@/store/chatStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useRouter } from "next/navigation";
+import CodeBlock from "./CodeBlock";
 
 const questions = [
   {
@@ -139,59 +140,10 @@ export default function Chat() {
                           remarkPlugins={[remarkGfm]}
                           components={{
                             code({ children, className }) {
-                              const isBlock = !!className;
-                              return isBlock ? (
-                                <code className="block bg-gray-800 text-green-300 rounded-lg p-3 text-sm font-mono overflow-x-auto my-2">
-                                  {children}
-                                </code>
-                              ) : (
-                                <code className="bg-gray-200 dark:bg-gray-600 rounded px-1 py-0.5 text-sm font-mono">
-                                  {children}
-                                </code>
-                              );
-                            },
-                            pre({ children }) {
                               return (
-                                <pre className="bg-gray-800 rounded-lg p-3 overflow-x-auto my-2">
-                                  {children}
-                                </pre>
-                              );
-                            },
-                            table({ children }) {
-                              return (
-                                <div className="overflow-x-auto my-2">
-                                  <table className="w-full text-sm border-collapse">
-                                    {children}
-                                  </table>
-                                </div>
-                              );
-                            },
-                            thead({ children }) {
-                              return (
-                                <thead className="bg-gray-200 dark:bg-gray-700">
-                                  {children}
-                                </thead>
-                              );
-                            },
-                            th({ children }) {
-                              return (
-                                <th className="border border-gray-300 dark:border-gray-600 px-3 py-2 text-left font-semibold">
-                                  {children}
-                                </th>
-                              );
-                            },
-                            td({ children }) {
-                              return (
-                                <td className="border border-gray-300 dark:border-gray-600 px-3 py-2">
-                                  {children}
-                                </td>
-                              );
-                            },
-                            tr({ children }) {
-                              return (
-                                <tr className="even:bg-gray-50 dark:even:bg-gray-700/50">
-                                  {children}
-                                </tr>
+                                <CodeBlock className={className}>
+                                  {String(children)}
+                                </CodeBlock>
                               );
                             },
                           }}

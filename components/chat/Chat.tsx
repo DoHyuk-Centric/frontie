@@ -106,7 +106,7 @@ export default function Chat() {
                 질문해보세요.
               </p>
             </div>
-            <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col items-center w-full gap-2">
               {questions.map((q, index) => (
                 <ExampleQuestion
                   key={index}

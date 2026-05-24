@@ -18,6 +18,7 @@ import remarkGfm from "remark-gfm";
 import { useChatStore } from "@/store/chatStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useRouter } from "next/navigation";
+import rehypeRaw from "rehype-raw"
 import CodeBlock from "./CodeBlock";
 
 const questions = [
@@ -138,12 +139,22 @@ export default function Chat() {
                       <div key={i} className="prose prose-sm max-w-none">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
                           components={{
                             code({ children, className }) {
                               return (
                                 <CodeBlock className={className}>
                                   {String(children)}
                                 </CodeBlock>
+                              );
+                            },
+                            img({ src, alt }) {
+                              return (
+                                <img
+                                  src={src}
+                                  alt={alt}
+                                  className="rounded-lg max-w-full my-2"
+                                />
                               );
                             },
                           }}

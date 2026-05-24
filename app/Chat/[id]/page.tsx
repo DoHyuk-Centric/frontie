@@ -13,8 +13,13 @@ export default function ChatRoomPage() {
   useEffect(() => {
     const id = Number(params.id);
     const exists = chatList.some((chat) => chat.id === id);
-    exists ? setActiveId(id) : router.replace("/chat");
-  }, [params.id]);
+    if(exists) {
+        setActiveId(id);
+    }
+    else{
+        router.replace("/chat")
+    }
+  }, [params.id, chatList, router, setActiveId]);
 
   return <Chat />;
 }

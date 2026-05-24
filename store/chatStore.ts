@@ -16,6 +16,7 @@ interface ChatStore {
   deleteChat: (id: number) => void;
   updateMessages: (id: number, messages: UIMessage[]) => void;
   updateTitle: (id: number, title: string) => void;
+  clearActiveId: () => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -55,6 +56,7 @@ export const useChatStore = create<ChatStore>()(
             chat.id === id ? { ...chat, title } : chat,
           ),
         })),
+      clearActiveId: () => set({ activeId: null }),
     }),
     {
       name: "chat-storage",

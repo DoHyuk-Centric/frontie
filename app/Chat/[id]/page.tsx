@@ -3,7 +3,6 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useChatStore } from "@/store/chatStore";
-import Chat from "@/components/chat/Chat";
 
 export default function ChatRoomPage() {
   const params = useParams();
@@ -21,5 +20,5 @@ export default function ChatRoomPage() {
     }
   }, [params.id, chatList, router, setActiveId]);
 
-  return <Chat />;
+  return null;
 }

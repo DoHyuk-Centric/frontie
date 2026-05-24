@@ -1,5 +1,14 @@
-import Chat from "@/components/chat/Chat";
+"use client";
 
-export default function ChatPage(){
-  return <Chat />
+import { useEffect } from "react";
+import { useChatStore } from "@/store/chatStore";
+
+export default function ChatPage() {
+  const { clearActiveId } = useChatStore();
+
+  useEffect(() => {
+    clearActiveId();
+  }, []);
+
+  return null;
 }

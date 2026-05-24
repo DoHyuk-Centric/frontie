@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import SettingsModal, { AISettings } from "@/components/settings/SettingsModal";
 import { useChatStore } from "@/store/chatStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Header({
   onSaveSettings,
@@ -25,17 +25,15 @@ export default function Header({
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [settingsOpen, setSettingOpen] = useState(false);
-  const { chatList, activeId, addChat, setActiveId, deleteChat } =
+  const { chatList, activeId, deleteChat } =
     useChatStore();
 
   const handleAddChat = () => {
-    const id = addChat();
-    router.push(`/chat/${id}`);
+    router.push(`/chat`);
   };
 
   const handleSelectChat = (id: number) => {
-    setActiveId(id);
-    router.push(`chat/${id}`);
+    router.push(`/chat/${id}`);
   };
 
   return (
@@ -50,7 +48,7 @@ export default function Header({
         <h1 className="flex-1 text-center text-base font-semibold">프론티</h1>
 
         <div className="w-20 flex items-center justify-end">
-          <Button variant="ghost" size="icon" onClick={addChat}>
+          <Button variant="ghost" size="icon" onClick={handleAddChat}>
             <Plus size={20} />
           </Button>
           <Button
@@ -78,7 +76,7 @@ export default function Header({
         <div className="p-3">
           <Button
             className="w-full bg-foreground text-background hover:bg-foreground/90 rounded-xl"
-            onClick={addChat}
+            onClick={handleAddChat}
           >
             <Plus size={16} /> 새 대화
           </Button>
@@ -95,7 +93,7 @@ export default function Header({
                 <Button
                   variant={activeId === chat.id ? "secondary" : "ghost"}
                   className="w-full justify-start gap-2 text-sm font-normal pr-8"
-                  onClick={() => setActiveId(chat.id)}
+                  onClick={() => handleSelectChat(chat.id)}
                 >
                   <MessageSquare
                     size={16}

@@ -17,6 +17,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useChatStore } from "@/store/chatStore";
 import { useSettingsStore } from "@/store/settingsStore";
+import { useRouter } from "next/navigation";
 
 const questions = [
   {
@@ -45,9 +46,10 @@ const cleanText = (text: string) =>
   text.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 
 export default function Chat() {
+  const router = useRouter();
   const [input, setInput] = useState("");
   const { settings } = useSettingsStore();
-  const { chatList, activeId, updateMessages } = useChatStore();
+  const { chatList, activeId, updateMessages, addChat } = useChatStore();
   const activeChat = chatList.find((c) => c.id === activeId);
 
   const { messages, sendMessage, status, setMessages } = useChat({
@@ -82,6 +84,14 @@ export default function Chat() {
 
   const isLoading = status === "streaming" || status === "submitted";
   const hasMessages = messages.length > 0;
+
+  const handleSendMessage = (option: { text: string }) => {
+    if (!activeId) {
+      const id = addChat();
+      router.push(`/chat/${id}`);
+    }
+    sendMessage(option);
+  };
   return (
     <main className="flex flex-col flex-1 min-h-0">
       <div className="flex flex-col items-center justify-center p-4 flex-1 gap-4 min-h-0 overflow-hidden">
@@ -204,7 +214,7 @@ export default function Chat() {
       <ChatInput
         input={input}
         setInput={setInput}
-        onSubmit={sendMessage}
+        onSubmit={handleSendMessage}
         isLoading={isLoading}
       />
     </main>

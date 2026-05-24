@@ -14,17 +14,29 @@ import {
 import { Button } from "@/components/ui/button";
 import SettingsModal, { AISettings } from "@/components/settings/SettingsModal";
 import { useChatStore } from "@/store/chatStore";
+import { useRouter } from "next/router";
 
 export default function Header({
   onSaveSettings,
 }: {
   onSaveSettings: (s: AISettings) => void;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [settingsOpen, setSettingOpen] = useState(false);
   const { chatList, activeId, addChat, setActiveId, deleteChat } =
     useChatStore();
+
+  const handleAddChat = () => {
+    const id = addChat();
+    router.push(`/chat/${id}`);
+  };
+
+  const handleSelectChat = (id: number) => {
+    setActiveId(id);
+    router.push(`chat/${id}`);
+  };
 
   return (
     <>

@@ -11,7 +11,7 @@ interface Chat {
 interface ChatStore {
   chatList: Chat[];
   activeId: number | null;
-  addChat: () => void;
+  addChat: () => number;
   setActiveId: (id: number) => void;
   deleteChat: (id: number) => void;
   updateMessages: (id: number, messages: UIMessage[]) => void;
@@ -34,6 +34,7 @@ export const useChatStore = create<ChatStore>()(
           chatList: [newChat, ...state.chatList],
           activeId: newChat.id,
         }));
+        return newChat.id;
       },
 
       setActiveId: (id) => set({ activeId: id }),

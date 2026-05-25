@@ -6,6 +6,7 @@ interface Chat {
   id: number;
   title: string;
   messages: UIMessage[];
+  messageFiles: Record<string, string[]>;
 }
 
 interface ChatStore {
@@ -16,6 +17,7 @@ interface ChatStore {
   deleteChat: (id: number) => void;
   updateMessages: (id: number, messages: UIMessage[]) => void;
   updateTitle: (id: number, title: string) => void;
+  updateMessageFiles: (chatId: number, messageId: string, fileNames: string[]) => void;
   clearActiveId: () => void;
 }
 
@@ -30,6 +32,7 @@ export const useChatStore = create<ChatStore>()(
           id: Date.now(),
           title: "새 대화",
           messages: [],
+          messageFiles: {},
         };
         set((state) => ({
           chatList: [newChat, ...state.chatList],
@@ -54,6 +57,14 @@ export const useChatStore = create<ChatStore>()(
         set((state) => ({
           chatList: state.chatList.map((chat) =>
             chat.id === id ? { ...chat, title } : chat,
+          ),
+        })),
+      updateMessageFiles: (chatId, messageId, fileNames) =>
+        set((state) => ({
+          chatList: state.chatList.map((chat) =>
+            chat.id === chatId
+              ? { ...chat, messageFiles: { ...chat.messageFiles, [messageId]: fileNames } }
+              : chat,
           ),
         })),
       clearActiveId: () => set({ activeId: null }),

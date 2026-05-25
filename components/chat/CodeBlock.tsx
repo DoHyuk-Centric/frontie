@@ -1,5 +1,6 @@
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+"use client";
+
+import { useEffect, useState } from "react";
 
 interface Props {
   children: string;
@@ -9,6 +10,18 @@ interface Props {
 export default function CodeBlock({ children, className }: Props) {
   const language = className?.replace("language-", "") ?? "text";
   const isBlock = !!className;
+  const [html, setHtml] = useState<string>("");
+
+  useEffect(() => {
+    if (!isBlock) return;
+    const code = String(children).replace(/\n$/, "");
+    const supported = ["tsx", "typescript", "javascript", "python", "bash", "css", "json", "html"];
+    const lang = supported.includes(language) ? language : "text";
+
+    import("shiki").then(({ codeToHtml }) =>
+      codeToHtml(code, { lang, theme: "one-dark-pro" }).then(setHtml)
+    );
+  }, [children, language, isBlock]);
 
   if (!isBlock) {
     return (
@@ -18,19 +31,18 @@ export default function CodeBlock({ children, className }: Props) {
     );
   }
 
+  if (!html) {
+    return (
+      <pre className="bg-gray-900 rounded-lg p-4 text-sm font-mono text-gray-100 my-2 overflow-x-auto">
+        <code>{String(children).replace(/\n$/, "")}</code>
+      </pre>
+    );
+  }
+
   return (
-    <div className="not-prose">
-        <SyntaxHighlighter
-          language={language}
-          style={oneDark}
-          customStyle={{
-            borderRadius: "0.5rem",
-            fontSize: "0.875rem",
-            margin: "0.5rem 0",
-          }}
-        >
-          {String(children).replace(/\n$/, "")}
-        </SyntaxHighlighter>
-    </div>
+    <div
+      className="not-prose text-sm my-2 [&>pre]:rounded-lg [&>pre]:p-4 [&>pre]:overflow-x-auto"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   );
 }

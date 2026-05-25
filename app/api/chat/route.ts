@@ -4,24 +4,32 @@ import {
   UIMessage,
   ModelMessage,
   TextPart,
+  ImagePart,
 } from "ai";
 import { MODELS } from "@/lib/ai-providers";
+
+interface EncodedFile {
+  name: string;
+  type: string;
+  data: string;
+}
 
 export async function POST(req: Request) {
   const {
     messages,
-    model = `gemini`,
+    model = "gemini",
     creativity = 70,
     language = "ko",
+    files = [],
   }: {
     messages: UIMessage[];
     model?: string;
     creativity?: number;
-    maxLength?: string;
     language?: string;
+    files?: EncodedFile[];
   } = await req.json();
 
-  const selectedModel = MODELS[model as keyof typeof MODELS] ?? MODELS.groq;
+  const selectedModel = MODELS[model as keyof typeof MODELS] ?? MODELS.gemini;
 
   const systemPrompt =
     language === "en"
@@ -35,18 +43,32 @@ export async function POST(req: Request) {
          질문에 바로 답변하세요. 불필요한 서두는 생략하세요.`;
 
   const convertedMessages = await convertToModelMessages(messages);
-  const sanitizedMessages: ModelMessage[] =
-    model === "cerebras"
-      ? (convertedMessages.map((msg) => ({
-          role: msg.role,
-          content:
-            typeof msg.content === "string"
-              ? msg.content
-              : (msg.content as TextPart[]).filter(
-                  (part) => part.type === "text",
-                ),
-        })) as ModelMessage[])
-      : convertedMessages;
+  const sanitizedMessages: ModelMessage[] = convertedMessages.map((msg) => ({
+    role: msg.role,
+    content:
+      typeof msg.content === "string"
+        ? msg.content
+        : (msg.content as TextPart[]).filter((part) => part.type === "text"),
+  })) as ModelMessage[];
+
+  if (files.length > 0) {
+    const lastMessage = sanitizedMessages[sanitizedMessages.length - 1];
+    const imageParts: ImagePart[] = files
+      .filter((f) => f.type.startsWith("image/"))
+      .map((f) => ({
+        type: "image",
+        image: Buffer.from(f.data, "base64"),
+        mimeType: f.type,
+      }));
+
+    if (imageParts.length > 0) {
+      const textContent = typeof lastMessage.content === "string"
+        ? [{ type: "text" as const, text: lastMessage.content }]
+        : (lastMessage.content as TextPart[]);
+
+      lastMessage.content = [...textContent, ...imageParts];
+    }
+  }
 
   const result = streamText({
     model: selectedModel,

@@ -16,7 +16,7 @@ const questions = [
 export default function WelcomeActions({
   onSend,
 }: {
-  onSend: (option: { text: string }) => void;
+  onSend: (option: { text: string; files?: File[] }) => void;
 }) {
   return (
     <div className="flex flex-col items-center w-full gap-2">

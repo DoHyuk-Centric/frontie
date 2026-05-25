@@ -4,7 +4,7 @@ import WelcomeActions from "./WelcomeActions";
 export default function WelcomeScreen({
   onSend,
 }: {
-  onSend: (option: { text: string }) => void;
+  onSend: (option: { text: string; files?:File[] }) => void;
 }) {
   return (
     <>

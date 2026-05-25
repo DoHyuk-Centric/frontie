@@ -12,7 +12,13 @@ const CodeBlock = dynamic(() => import("./CodeBlock"), { ssr: false });
 const cleanText = (text: string) =>
   text.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 
-function MessageItem({ message }: { message: UIMessage }) {
+function MessageItem({
+  message,
+  fileNames = [],
+}: {
+  message: UIMessage;
+  fileNames?: string[];
+}) {
   const remarkPlugins = useMemo(() => [remarkGfm], []);
   const rehypePlugins = useMemo(() => [rehypeRaw], []);
 
@@ -23,6 +29,15 @@ function MessageItem({ message }: { message: UIMessage }) {
           ? "bg-blue-500 text-white dark:bg-slate-700"
           : "bg-gray-100 dark:bg-gray-900"
       }`}>
+        {fileNames.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-2">
+            {fileNames.map((name, i) => (
+              <span key={i} className="flex items-center gap-1 bg-white/20 rounded-lg px-2 py-1 text-xs">
+                📎 {name}
+              </span>
+            ))}
+          </div>
+        )}
         {message.parts.map((part, i) =>
           part.type === "text" ? (
             <div key={message.id + "-" + i} className="prose prose-invert prose-sm max-w-none prose-code:bg-transparent">

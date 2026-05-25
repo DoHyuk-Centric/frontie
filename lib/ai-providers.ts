@@ -11,7 +11,7 @@ export const cerebras = createCerebras({
 });
 
 export const MODELS = {
-  groq: groq(`qwen/qwen3-32b`),
+  groq: groq(`meta-llama/llama-4-scout-17b-16e-instruct`),
   gemini: google(`gemini-2.5-flash`),
   cerebras: cerebras(`gpt-oss-120b`),
 } as const;
